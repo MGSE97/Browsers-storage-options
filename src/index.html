@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browser storage tests</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="text/javascript" src="scripts/renderer.js"></script>
+    <link rel="stylesheet" href="style.scss" />
+    <script type="module" src="./scripts/web.ts"></script>
 </head>
 <body class="dark">
     <h1>Browser storage tests</h1>
@@ -17,42 +17,5 @@
     <main>
         ToDo: Iframe, Object
     </main>
-
-    <script>
-        const tests = [
-            {
-                id: 'test1',
-                name: 'Cookie save',
-                result: 'pass',
-                details: 'Cookie was saved',
-                desc: 'Test description',
-            },
-            {
-                id: 'test2',
-                name: 'Cookie save',
-                result: 'fail',
-                details: 'Cookies are restricted',
-                desc: 'Test description',
-            },
-            {
-                id: 'test3',
-                name: 'Cookie save',
-                result: 'running',
-                details: 'Test is running',
-                desc: 'Test description',
-            }
-        ];
-
-        renderAPI('#apis', 'API', tests);
-
-        setTimeout(() => {
-            updateTest('#apis', 'test3', {
-                name: 'Cookie changed',
-                result: 'pass',
-                details: 'Test done',
-                desc: 'New description',
-            });
-        }, 3000);
-    </script>
 </body>
 </html>

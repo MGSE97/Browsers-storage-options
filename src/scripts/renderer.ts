@@ -1,19 +1,21 @@
-const createElement = (tag, text, props) => {
+import { Test, TestStatus } from './const';
+
+const createElement = (tag: string, text?: string, props?: {[key: string]: string | number}) => {
     const el = document.createElement(tag)
-    if(props) Object.keys(props).forEach(k => el.setAttribute(k, props[k]))
+    if(props) Object.keys(props).forEach(k => el.setAttribute(k, props[k]?.toString()))
     if(text) el.innerText = text
     return el
 }
 
-const testResultToText = (result) => { 
+const testResultToText = (result: TestStatus) => { 
     switch(result) {
-        case 'pass': return '✔'
-        case 'fail': return '❌'
-        case 'running': return '🔥'
+        case TestStatus.Passed: return '✔'
+        case TestStatus.Failed: return '❌'
+        case TestStatus.Running: return '🔥'
     }
 }
 
-const renderAPI = (selector, name, tests) => {
+export const renderTests = (selector: string, name: string, tests: Test[]) => {
     const container = document.querySelector(selector)
     if(!container) {
         console.error(`No element found for ${selector}`)
@@ -30,11 +32,12 @@ const renderAPI = (selector, name, tests) => {
     header.appendChild(createElement('th', 'Test'))
     header.appendChild(createElement('th', 'Result'))
     header.appendChild(createElement('th', 'Details'))
+    
     table.appendChild(header)
 
     if(tests) {
         tests.forEach(test => {
-            const row = createElement('tr', null, { id: test.id })
+            const row = createElement('tr', undefined, { id: test.id })
             row.appendChild(createElement('td', test.name))
             row.appendChild(createElement(
                 'td', 
@@ -43,17 +46,17 @@ const renderAPI = (selector, name, tests) => {
             ))
             row.appendChild(createElement('td', test.details))
 
-            const desc = createElement('tr', null, {class: 'desc'})
+            const desc = createElement('tr', undefined, {class: 'desc'})
             desc.appendChild(createElement('td', test.desc , {colspan: 3}))
             
             table.appendChild(row) 
             table.appendChild(desc)
 
-            const spacer = createElement('tr', null, {class: 'spacer'})
-            spacer.appendChild(createElement('td', null, {colspan: 3}))
+            const spacer = createElement('tr', undefined, {class: 'spacer'})
+            spacer.appendChild(createElement('td', undefined, {colspan: 3}))
             table.appendChild(spacer)
         });
-        table.removeChild(table.lastChild)
+        table.removeChild(table.lastChild as Node)
     }
 
     api.appendChild(title)
@@ -62,24 +65,26 @@ const renderAPI = (selector, name, tests) => {
     container.appendChild(api)
 }
 
-const updateTest = (selector, testid, test) => {
-    const testSelector = `${selector} tr#${testid}`
+export const updateTest = (selector: string, test: Test) => {
+    const testSelector = `${selector} tr#${test.id}`
     const container = document.querySelector(testSelector)
     if(!container) {
         console.error(`No element found for ${testSelector}`)
         return
     }
 
-    const name = container.children[0]
-    const result = container.children[1]
-    const details = container.children[2]
-    const desc = container.nextSibling.children[0]
+    const name = container.children[0] as HTMLElement | null
+    const result = container.children[1] as HTMLElement | null
+    const details = container.children[2] as HTMLElement | null
+    const desc = container.nextSibling?.childNodes[0] as HTMLElement | null
 
-    name.innerText = test.name
-    result.innerText = testResultToText(test.result)
-    result.className = test.result
-    details.innerText = test.details
-    desc.innerText = test.desc
+    if(name) name.innerText = test.name
+    if(result) {
+        result.innerText = testResultToText(test.result)
+        result.className = test.result
+    }
+    if(details) details.innerText = test.details
+    if(desc) desc.innerText = test.desc
 
     container.classList.toggle('changed')
     setTimeout(() => {
