@@ -49,7 +49,8 @@ jobs:
           git config user.name "$CI_NAME"
           git config user.email "$CI_EMAIL"
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
-          git commit -am "feat(gp): deploy website"
+          git add .
+          git commit -m "feat(gp): deploy website"
           git push
       - name: Cleanup
         run: |
