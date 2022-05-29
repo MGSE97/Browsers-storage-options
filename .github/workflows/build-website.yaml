@@ -29,8 +29,8 @@ jobs:
         run: cd source
       - name: Setup
         uses: pnpm/action-setup@v2.2.2
-          with:
-            version: 7.1.3
+        with:
+          sversion: 7.1.3
       - name: Install
         run: pnpm i
       - name: Build
