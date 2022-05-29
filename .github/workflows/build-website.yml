@@ -43,9 +43,12 @@ jobs:
       - name: Check for changes 👀
         id: check-changes
         working-directory: ./build
-        run: if [[ `git status --porcelain` ]]; then echo "::set-output name=CI_CHANGES::true"; else echo "::set-output name=CI_CHANGES::false"; fi
+        run: | 
+          changes=[[ `git status --porcelain` ]] && "true" || "false"
+          echo "::set-output name=changes::$changes"
+          echo "changes=$changes"
       - name: Deploy 🚀
-        if: ${{ steps.check-changes.outputs.CI_CHANGES }} == "true"
+        if: ${{ steps.check-changes.outputs.changes }} == "true"
         working-directory: ./build
         env:
           CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
@@ -57,7 +60,7 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
           echo "::endgroup::"
           echo "::group::Git add"
-          git add .
+          git add -v .
           echo "::endgroup::"
           echo "::group::Git commit"
           git commit -m "feat(gp): deploy website"
