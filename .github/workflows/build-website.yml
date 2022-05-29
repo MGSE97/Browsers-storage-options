@@ -39,7 +39,7 @@ jobs:
         run: pnpm ci
       - name: Copy to build
         working-directory: ./source/src
-        run: cp -a dist/. ../../build/
+        run: rsync -av dist/ ../../build
       - name: Deploy 🚀
         working-directory: ./build
         env:
