@@ -44,7 +44,7 @@ jobs:
         id: check-changes
         working-directory: ./build
         run: | 
-          changes=$([ `git status --porcelain` ] && echo "true" || echo "false")
+          changes=$([[ `git status --porcelain` ]] && echo "true" || echo "false")
           echo "::set-output name=changes::$changes"
           echo "changes=$changes"
       - name: Deploy 🚀
