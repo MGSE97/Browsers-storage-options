@@ -2,7 +2,9 @@ name: Build website CI
 
 on:
   push:
-    branches: [ main, features/tests ]
+    branches: 
+      - main
+      - features/tests
 
 permissions: 
   contents: write
