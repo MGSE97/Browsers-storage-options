@@ -48,7 +48,7 @@ jobs:
           echo "::set-output name=changes::$changes"
           echo "changes=$changes"
       - name: Deploy 🚀
-        if: ${{ steps.check-changes.outputs.changes }} == "true"
+        if: ${{ steps.check-changes.outputs.changes == "true" }}
         working-directory: ./build
         env:
           CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
