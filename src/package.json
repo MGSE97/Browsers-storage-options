@@ -1,17 +1,15 @@
 {
 	"name": "browsers-storage-options-demo",
-	"browserslist": "default, not dead",
+	"browserslist": "defaults, not IE 11, not dead",
 	"source": "index.html",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
 	"scripts": {
 		"start": "parcel",
 		"build": "parcel build",
 		"lint": "eslint",
 		"check": "tsc --noEmit",
-		"ci": "pnpm build && pnpm lint && pnpm check && pnpm test"
+		"ci": "pnpm build && pnpm lint && pnpm check"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"@parcel/config-default": "^2.6.0",
 		"@parcel/core": "^2.6.0",
 		"@parcel/transformer-sass": "^2.6.0",
@@ -19,7 +17,7 @@
 		"parcel": "^2.6.0",
 		"typescript": "^4.7.2"
 	},
-	"dependencies": {
+	"devDependencies": {
 		"eslint": "^8.16.0"
 	}
 }
