@@ -27,27 +27,26 @@ jobs:
         with:
           path: ./build
           ref: gh-pages
-      - name: Switch to source
-        run: cd source
       - name: Setup
         uses: pnpm/action-setup@v2.2.2
         with:
           version: 7.1.3
       - name: Install
+        working-directory: ./source
         run: pnpm i
       - name: Build
+        working-directory: ./source
         run: pnpm ci
       - name: Copy to build
-        run: |
-          cp -r src/dist ../build
-          cd ../build
+        working-directory: ./source
+        run: cp -r src/dist ../build
       - name: Deploy 🚀
+        working-directory: ./build
         run: |
           git add *
           git commit -m "feat(gp): deploy website"
           git push
       - name: Cleanup
         run: |
-          cd ..
           rm -rf build
           rm -rf source
