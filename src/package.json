@@ -7,7 +7,7 @@
 		"build": "parcel build",
 		"lint": "eslint",
 		"check": "tsc --noEmit",
-		"ci": "pnpm build && pnpm lint && pnpm check"
+		"ci": "pnpm build && pnpm check && pnpm lint"
 	},
 	"dependencies": {
 		"@parcel/config-default": "^2.6.0",
