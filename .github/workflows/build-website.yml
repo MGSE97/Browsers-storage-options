@@ -38,8 +38,8 @@ jobs:
         working-directory: ./source/src
         run: pnpm ci
       - name: Copy to build
-        working-directory: ./source/src/dist
-        run: cp -r ./ ../../build/
+        working-directory: ./source/src
+        run: cp -a dist/. ../../build/
       - name: Deploy 🚀
         working-directory: ./build
         env:
