@@ -4,7 +4,7 @@
 	"source": "index.html",
 	"scripts": {
 		"start": "parcel",
-		"build": "parcel build",
+		"build": "parcel build --public-url ./ --no-source-maps",
 		"lint": "eslint",
 		"check": "tsc --noEmit",
 		"ci": "pnpm build && pnpm check && pnpm lint"
