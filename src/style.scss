@@ -1,0 +1,108 @@
+.dark {
+    --bg-color: #303030;
+    --bg2-color: #505050;
+    --text-color: lightgray;
+    --line-color: gray;
+    --border-radius: 10px;
+    --pass-color: yellowgreen;
+    --fail-color: red;
+}
+
+.light {
+    --bg-color: white;
+    --bg2-color: #c1c1c1;
+    --text-color: black;
+    --line-color: gray;
+    --border-radius: 10px;
+    --pass-color: green;
+    --fail-color: red;
+}
+
+html, 
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+article {
+    margin: 0 1em;
+}
+
+h1 {
+    border-bottom: 2px dashed var(--line-color);
+    padding: 0.5em;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+h3 {
+    margin-bottom: 0.5em;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--line-color);
+    border-radius: var(--border-radius);
+    
+    th {
+        text-align: left;
+        min-width: 5em;
+        border-left: 1px solid var(--line-color);
+        border-bottom: 1px solid var(--line-color);
+    }
+    
+    tr {
+        transition: background-color 1s linear;
+        -moz-transition: background-color 1s linear;  
+        -webkit-transition: background-color 1s linear; 
+        -ms-transition: background-color 1s linear; 
+
+        &:first-child th:first-child {
+            border-left: unset;
+        }
+        
+        &:last-child td:last-child {
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        &.desc {
+            font-size: 0.85em;
+            background-color: var(--bg2-color);
+            border-bottom: 1px solid var(--line-color);
+            padding-left: 1em;
+        }
+
+        &.changed {
+            background-color: #ffa50050;
+        }
+
+        & .spacer {
+            height: 1em;
+        }
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        text-align: center;
+    }
+
+    th, 
+    td {
+        padding: 0.2em 0.5em;
+    }
+
+    td {
+        &.pass {
+            color: var(--pass-color);
+        }
+
+        &.fail {
+            color: var(--fail-color);
+        }
+    }
+}
