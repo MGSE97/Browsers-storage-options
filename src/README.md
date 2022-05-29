@@ -1,6 +1,6 @@
 # Browsers storage options demo
 
-This demo allows you to run tests using your own browser.
+This demo allows you to run tests using your own browser 💻. Latest deployment is available [🚀online](https://mgse97.github.io/Browsers-storage-options/).
 
 ## Getting started
 
@@ -8,19 +8,27 @@ Run all commands from `src` directory.
 
 1. Install all required packages using your favorite package manager.
 
-> `npm install`
-
-> `yarn install`
-
-> `pnpm install`
+```
+npm install
+```
+```
+yarn install
+```
+```
+pnpm install
+```
 
 2. Start parcel server
 
-> `npm start`
-
-> `yarn start`
-
-> `pnpm start`
+```
+npm start
+```
+```
+yarn start
+```
+```
+pnpm start
+```
 
 3. Navigate to parcel url printed to console
 
