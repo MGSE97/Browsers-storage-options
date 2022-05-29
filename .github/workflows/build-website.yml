@@ -42,9 +42,15 @@ jobs:
         run: cp -r dist ../../build
       - name: Deploy 🚀
         working-directory: ./build
+        env:
+          CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
+          CI_EMAIL: ${{ secrets.BUILD_WEBSITE_CI_EMAIL }}
         run: |
-          git add *
-          git commit -m "feat(gp): deploy website"
+          git config user.name "$CI_NAME"
+          git config user.email "$CI_EMAIL"
+          git config commit.gpgsign true
+          git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+          git commit -am "feat(gp): deploy website"
           git push
       - name: Cleanup
         run: |
