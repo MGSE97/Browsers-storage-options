@@ -14,7 +14,7 @@ jobs:
     concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare dirs
+      - name: Prepare dirs 
         run: |
           mkdir source
           mkdir build
@@ -31,27 +31,40 @@ jobs:
         uses: pnpm/action-setup@v2.2.2
         with:
           version: 7.1.3
-      - name: Install
+      - name: Install 🔧
         working-directory: ./source/src
         run: pnpm i
-      - name: Build
+      - name: Build 🧪
         working-directory: ./source/src
         run: pnpm ci
       - name: Copy to build
         working-directory: ./source/src
         run: rsync -av dist/ ../../build
+      - name: Check for changes 👀
+        id: check-changes
+        working-directory: ./build
+        run: if [[ `git status --porcelain` ]]; then echo "::set-output name=CI_CHANGES::true"; else echo "::set-output name=CI_CHANGES::false"; fi
       - name: Deploy 🚀
+        if: ${{ steps.check-changes.outputs.CI_CHANGES }} == "true"
         working-directory: ./build
         env:
           CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
           CI_EMAIL: ${{ secrets.BUILD_WEBSITE_CI_EMAIL }}
         run: |
+          echo "::group::Git config"
           git config user.name "$CI_NAME"
           git config user.email "$CI_EMAIL"
           git remote set-url origin https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}
+          echo "::endgroup::"
+          echo "::group::Git add"
           git add .
+          echo "::endgroup::"
+          echo "::group::Git commit"
           git commit -m "feat(gp): deploy website"
+          echo "::endgroup::"
+          echo "::group::Git push"
           git push
+          echo "::endgroup::"
       - name: Cleanup
         run: |
           rm -rf build
