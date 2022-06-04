@@ -56,7 +56,7 @@ jobs:
         env:
           CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
           CI_EMAIL: ${{ secrets.BUILD_WEBSITE_CI_EMAIL }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::group::Git config"
           git config user.name "$CI_NAME"
