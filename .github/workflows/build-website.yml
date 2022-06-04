@@ -57,7 +57,6 @@ jobs:
         env:
           CI_NAME: ${{ secrets.BUILD_WEBSITE_CI_NAME }}
           CI_EMAIL: ${{ secrets.BUILD_WEBSITE_CI_EMAIL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::group::Git config"
           git config user.name "$CI_NAME"
@@ -74,6 +73,7 @@ jobs:
           git push origin "ci/website/${GITHUB_SHA::7}"
           echo "::endgroup::"
           echo "::group::GitHub PR"
+          gh auth login --with-token < echo "${{ secrets.TOKEN }}"
           gh pr create -t "CI Website deployment" -b "CI Website deployment for commit ${{ github.sha }} in branch ${{ github.ref_name }}." -r "$CI_EMAIL" -a "@me" -B "gh-pages" -l "CI"
           echo "::endgroup::"
       - name: Cleanup
