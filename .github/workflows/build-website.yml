@@ -74,7 +74,7 @@ jobs:
           echo "::endgroup::"
           echo "::group::GitHub PR"
           echo "${{ secrets.TOKEN }}" | gh auth login --with-token
-          gh pr create -t "CI Website deployment" -b "CI Website deployment for commit ${{ github.sha }} in branch ${{ github.ref_name }}." -r "$CI_EMAIL" -a "@me" -B "gh-pages" -l "CI"
+          gh pr create -t "CI Website deployment" -b "CI Website deployment for commit ${{ github.sha }} in branch ${{ github.ref_name }}." -r "$CI_NAME" -a "@me" -B "gh-pages" -l "CI"
           echo "::endgroup::"
       - name: Cleanup
         run: |
