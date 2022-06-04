@@ -27,6 +27,9 @@ jobs:
         with:
           path: ./build
           ref: gh-pages
+      - name: Create branch
+        run: git checkout -b "ci/website/${{ github.sha::8 }}" "gh-pages"
+        working-directory: ./build
       - name: Setup
         uses: pnpm/action-setup@v2.2.2
         with:
@@ -66,7 +69,10 @@ jobs:
           git commit -m "feat(gp): deploy website"
           echo "::endgroup::"
           echo "::group::Git push"
-          git push
+          git push origin "ci/website/${{ github.sha::8 }}"
+          echo "::endgroup::"
+          echo "::group::GitHub PR"
+          gh pr create -t "CI Website deployment" -b "CI Website deployment for commit ${{ github.sha }} in branch ${{ github.ref_name }}." -r "$CI_EMAIL" -a "@me" -B "gh-pages" -l "CI"
           echo "::endgroup::"
       - name: Cleanup
         run: |
