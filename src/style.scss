@@ -18,10 +18,16 @@
     --fail-color: red;
 }
 
-html, 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--bg-color, #303030);
+    color: var(--text-color, lightgray);
+
+    &.loaded, &.loaded * {
+        transition: background-color 0.5s linear;
+        -moz-transition: background-color 0.5s linear;  
+        -webkit-transition: background-color 0.5s linear; 
+        -ms-transition: background-color 0.5s linear; 
+    }
 }
 
 article {
@@ -32,6 +38,16 @@ h1 {
     border-bottom: 2px dashed var(--line-color);
     padding: 0.5em;
     text-align: center;
+
+    button {
+        width: 2em;
+        height: 1em;
+        background-color: transparent;
+        border: none;
+        color: var(--text-color);
+        cursor: pointer;
+        font-size: 0.8em;
+    }
 }
 
 h2 {
