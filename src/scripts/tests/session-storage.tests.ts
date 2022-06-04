@@ -6,22 +6,20 @@ const availabilityTest = new Test({
     id: 'ss-availability',
     name: 'Available',
     result: TestStatus.Running,
-    details: 'Checking availability...',
-    desc: 'Checks if session storage (window.sessionStorage) is available to be used.',
+    details: ['Checking availability...'],
+    desc: 'Checks if session storage is available to be used.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(sessionStorage 
             && typeof sessionStorage.getItem === 'function' 
             && typeof sessionStorage.setItem === 'function') 
         {
-            test.details = 'Available'
-            test.result = TestStatus.Passed
+            test.details.unshift('Available')
             resolve()
         }
         else
         {
-            test.details = 'Not available'
-            test.result = TestStatus.Failed
-            resolve()
+            test.details.unshift('Not available')
+            reject()
         }
     })
 })
@@ -30,7 +28,7 @@ const setTest = new Test({
     id: 'ss-set',
     name: 'Set value',
     result: TestStatus.Running,
-    details: 'Setting value...',
+    details: ['Setting value...'],
     desc: 'Tries to set a value into session storage.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(sessionStorage
@@ -39,22 +37,21 @@ const setTest = new Test({
         {
             try {
                 sessionStorage.setItem('test.ss-set', 'test')
-                test.details = 'Successfully set value'
-                test.result = TestStatus.Passed
+                test.details.unshift('Successfully set value')
 
                 sessionStorage.removeItem('test.ss-set')
+                
+                resolve()
             }
             catch(ex) {
-                test.details = `Failed to set value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
+                test.details.unshift(`Failed to set value<br/>${(ex as Error)?.message}`)
+                reject()
             }
-            resolve()
             return;
         }
 
-        test.details = 'Session Storage is not available'
-        test.result = TestStatus.Failed
-        resolve()
+        test.details.unshift('Session Storage is not available')
+        reject()
     }),
 })
 
@@ -62,7 +59,7 @@ const getTest = new Test({
     id: 'ss-get',
     name: 'Get value',
     result: TestStatus.Running,
-    details: 'Getting value...',
+    details: ['Getting value...'],
     desc: 'Tries to get a value from session storage.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(sessionStorage
@@ -74,48 +71,44 @@ const getTest = new Test({
             const value = "test"
             try {
                 sessionStorage.setItem(key, value)
-                test.details = 'Successfully set value'
+                test.details.unshift('Successfully set value')
             }
             catch(ex) {
-                test.details = `Failed to set value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
-                resolve()
+                test.details.unshift(`Failed to set value<br/>${(ex as Error)?.message}`)
+                reject()
                 return;
             }
 
             try {
                 const result = sessionStorage.getItem(key)
+                sessionStorage.removeItem(key)
+
                 if(!result)
                 {
-                    test.details = 'Failed to get value'
-                    test.result = TestStatus.Failed
+                    test.details.unshift('Failed to get value')
                 }
                 else if(result === value)
                 {
-                    test.details = 'Successfully got value'
-                    test.result = TestStatus.Passed
+                    test.details.unshift('Successfully got value')
+                    resolve()
                 }
-                else {
-                    test.details = 'Value has changed'
-                    test.result = TestStatus.Failed
+                else
+                {
+                    test.details.unshift('Value has changed')
                 }
-                
-                sessionStorage.removeItem(key)
 
-                resolve()
+                reject()
                 return;
             }
             catch(ex) {
-                test.details = `Failed to get value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
-                resolve()
+                test.details.unshift(`Failed to get value<br/>${(ex as Error)?.message}`)
+                reject()
                 return;
             }
         }
 
-        test.details = 'Session Storage is not available'
-        test.result = TestStatus.Failed
-        resolve()
+        test.details.unshift('Session Storage is not available')
+        reject()
     }),
 })
 

@@ -1,6 +1,7 @@
 import { renderTests, updateTest } from './renderer';
 import { getTheme, themes, toggleTheme, updateThemeButton } from './theme';
 import { tests } from './tests';
+import { TestStatus } from './const';
 
 // Toggle theme on click
 document.getElementById('themeBtn')?.addEventListener('click', () => {
@@ -17,9 +18,24 @@ window.onload = () => {
             renderTests('#apis', api, testSet);
 
             testSet.forEach(test => {
-                test.test(test).then(() => {
-                    updateTest('#apis', test);
-                })
+                test.test(test)
+                    .then(() => {
+                        test.result = TestStatus.Passed;
+                        updateTest('#apis', test);
+                    })
+                    .catch(() => {
+                        test.result = TestStatus.Failed;
+                        updateTest('#apis', test);
+                    });
+                
+                const interval = setInterval(() => {
+                    if (test.result === TestStatus.Running) {
+                        updateTest('#apis', test);
+                    }
+                    else {
+                        clearInterval(interval);
+                    }
+                }, 1000);
             })
         }
     }

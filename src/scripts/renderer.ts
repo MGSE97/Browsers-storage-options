@@ -44,7 +44,13 @@ export const renderTests = (selector: string, name: string, tests: Test[]) => {
                 testResultToText(test.result), 
                 {class: test.result}
             ))
-            row.appendChild(createElement('td', test.details))
+
+            const [currDetail, ...prevDetails] = test.details
+            const details = createElement('td', undefined, { 'data-length': test.details.length })
+            details.appendChild(createElement('span', currDetail))
+            details.appendChild(createElement('br'))
+            details.appendChild(createElement('small', prevDetails.join('<br/>')))
+            row.appendChild(details)
 
             const desc = createElement('tr', undefined, {class: 'desc'})
             desc.appendChild(createElement('td', test.desc , {colspan: 3}))
@@ -78,16 +84,33 @@ export const updateTest = (selector: string, test: Test) => {
     const details = container.children[2] as HTMLElement | null
     const desc = container.nextSibling?.childNodes[0] as HTMLElement | null
 
-    if(name) name.innerText = test.name
-    if(result) {
+    let changed = false
+    if(name && name.innerText !== test.name) {
+        name.innerText = test.name
+        changed = true
+    } 
+    if(result && result.className !== test.result) {
         result.innerText = testResultToText(test.result)
         result.className = test.result
+        changed = true
     }
-    if(details) details.innerText = test.details
-    if(desc) desc.innerText = test.desc
+    if(details && details.getAttribute('data-length') !== test.details.length.toString()) {
+        details.setAttribute('data-length', test.details.length.toString())
+        const [currDetail, ...prevDetails] = test.details
+        details.children[0].innerHTML = currDetail
+        details.children[2].innerHTML = prevDetails.join('<br/>')
+        changed = true
+    } 
+    if(desc && desc.innerText !== test.desc) {
+        desc.innerText = test.desc
+        changed = true
+    } 
 
-    container.classList.toggle('changed')
-    setTimeout(() => {
+    if(changed)
+    {
         container.classList.toggle('changed')
-    }, 1000)
+        setTimeout(() => {
+            container.classList.toggle('changed')
+        }, 1000)
+    }
 }

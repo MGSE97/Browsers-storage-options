@@ -6,22 +6,20 @@ const availabilityTest = new Test({
     id: 'ls-availability',
     name: 'Available',
     result: TestStatus.Running,
-    details: 'Checking availability...',
-    desc: 'Checks if local storage (window.localStorage) is available to be used.',
+    details: ['Checking availability...'],
+    desc: 'Checks if local storage is available to be used.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(localStorage 
             && typeof localStorage.getItem === 'function' 
             && typeof localStorage.setItem === 'function') 
         {
-            test.details = 'Available'
-            test.result = TestStatus.Passed
+            test.details.unshift('Available')
             resolve()
         }
         else
         {
-            test.details = 'Not available'
-            test.result = TestStatus.Failed
-            resolve()
+            test.details.unshift('Not available')
+            reject()
         }
     })
 })
@@ -30,7 +28,7 @@ const setTest = new Test({
     id: 'ls-set',
     name: 'Set value',
     result: TestStatus.Running,
-    details: 'Setting value...',
+    details: ['Setting value...'],
     desc: 'Tries to set a value into local storage.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(localStorage 
@@ -39,22 +37,20 @@ const setTest = new Test({
         {
             try {
                 localStorage.setItem('test.ls-set', 'test')
-                test.details = 'Successfully set value'
-                test.result = TestStatus.Passed
+                test.details.unshift('Successfully set value')
 
                 localStorage.removeItem('test.ls-set')
+                resolve()
             }
             catch(ex) {
-                test.details = `Failed to set value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
+                test.details.unshift(`Failed to set value<br/>${(ex as Error)?.message}`)
+                reject()
             }
-            resolve()
             return;
         }
 
-        test.details = 'LocalStorage is not available'
-        test.result = TestStatus.Failed
-        resolve()
+        test.details.unshift('LocalStorage is not available')
+        reject()
     }),
 })
 
@@ -62,7 +58,7 @@ const getTest = new Test({
     id: 'ls-get',
     name: 'Get value',
     result: TestStatus.Running,
-    details: 'Getting value...',
+    details: ['Getting value...'],
     desc: 'Tries to get a value from local storage.',
     test: (test) => new Promise<void>((resolve, reject) => {
         if(localStorage
@@ -74,48 +70,44 @@ const getTest = new Test({
             const value = "test"
             try {
                 localStorage.setItem(key, value)
-                test.details = 'Successfully set value'
+                test.details.unshift('Successfully set value')
             }
             catch(ex) {
-                test.details = `Failed to set value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
-                resolve()
+                test.details.unshift(`Failed to set value<br/>${(ex as Error)?.message}`)
+                reject()
                 return;
             }
 
             try {
                 const result = localStorage.getItem(key)
+                localStorage.removeItem(key)
+                
                 if(!result)
                 {
-                    test.details = 'Failed to get value'
-                    test.result = TestStatus.Failed
+                    test.details.unshift('Failed to get value')
                 }
                 else if(result === value)
                 {
-                    test.details = 'Successfully got value'
-                    test.result = TestStatus.Passed
+                    test.details.unshift('Successfully got value')
+                    resolve()
                 }
-                else {
-                    test.details = 'Value has changed'
-                    test.result = TestStatus.Failed
+                else 
+                {
+                    test.details.unshift('Value has changed')
                 }
 
-                localStorage.removeItem(key)
-                
-                resolve()
+                reject()
                 return;
             }
             catch(ex) {
-                test.details = `Failed to get value<br/>${(ex as Error)?.message}`
-                test.result = TestStatus.Failed
-                resolve()
+                test.details.unshift(`Failed to get value<br/>${(ex as Error)?.message}`)
+                reject()
                 return;
             }
         }
 
-        test.details = 'Local Storage is not available'
-        test.result = TestStatus.Failed
-        resolve()
+        test.details.unshift('Local Storage is not available')
+        reject()
     }),
 })
 

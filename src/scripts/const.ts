@@ -8,7 +8,7 @@ export interface ITest {
     id: string
     name: string
     result: TestStatus
-    details: string
+    details: [string]
     desc: string
     test: (test: ITest) => Promise<void>
 }
@@ -17,7 +17,7 @@ export class Test implements ITest {
     id: string
     name: string
     result: TestStatus
-    details: string
+    details: [string]
     desc: string
     test: (test: ITest) => Promise<void>
 

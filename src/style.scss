@@ -1,3 +1,20 @@
+@mixin scrollbar($width: 1em) { 
+    &::-webkit-scrollbar {
+        width: $width;
+
+        &-track {
+            background: var(--bg2-color); 
+        }
+        
+        &-thumb {
+            background: var(--line-color); 
+            &:hover {
+                background: var(--text-color); 
+            }
+        }
+    }   
+}
+
 .dark {
     --bg-color: #303030;
     --bg2-color: #505050;
@@ -28,6 +45,8 @@ body {
         -webkit-transition: background-color 0.5s linear; 
         -ms-transition: background-color 0.5s linear; 
     }
+
+    @include scrollbar;
 }
 
 article {
@@ -119,6 +138,14 @@ table {
 
         &.fail {
             color: var(--fail-color);
+        }
+        &:last-child small {
+            display: block;
+            max-height: 5em;
+            overflow-y: auto;
+            color: var(--line-color);
+            
+            @include scrollbar(0.8em);
         }
     }
 }
